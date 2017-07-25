@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="jquery-ui-themes-1.12.1/themes/smoothness/jquery-ui.css">
+   
+ 
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        body
+        {
+            font-family: sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+        #header
+        {
+            width: 100%;
+            background-color: #eeeeee;
+            padding: 5px;
+            height: 31px;
+        }
+        #buttonContainer
+        {
+            width: 233px;
+            margin: 0 auto;
+        }
+        .toggleButton
+        {
+            float: left;
+            border: 1px solid grey;
+            padding: 6px;
+            border-right: none;
+            font-size: 90%;
+        }
+        #logo
+        {
+            float: left;
+            font-weight: bold;
+            font-size: 120%;
+            padding-top: 4px;
+        }
+        #html
+        {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        #output
+        {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-right: 1px solid grey;
+        }
+        .active
+        {
+            background-color: #C5EFF7;
+        }
+        .highlightedButton
+        {
+            background-color: grey;
+        }
+        textarea
+        {
+           
+            resize: none;
+            border-top: none;
+            border-color: grey;
+        }
+        .panel
+        {
+            float: left;
+            width: 50%;
+            border-left: none;
+            
+        }
+        iframe
+        {
+            border: none;
+        }
+        .hidden
+        {
+            display: none;
+        }
+        #footer
+        {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            padding: 0.2rem;
+            background-color: #efefef;
+            text-align: center;
+            font-size: 70%;
+              
+        }
+        
+        @media only screen and (max-width:450px)
+        {
+
+           #header
+            {
+                height: 60px;
+                padding: 0;
+                margin: 0;
+            }
+            #logo
+            {
+                float: none;
+                display: block;
+                text-align: center;
+            }
+            #buttonContainer
+            {
+                float: none;
+                display: block;
+                margin: 0 auto;
+            }
+            
+
+        }
+    </style>
+    
+        
+</head>
+
+<body>
+    
+    <div id="header">
+        <div id="logo">
+            JsBin-Clone
+        </div>
+        <div id="buttonContainer">
+            <div class="toggleButton active" id="html">HTML</div>
+            <div class="toggleButton" id="css">CSS</div>
+            <div class="toggleButton" id="javascript">javascript</div>
+            <div class="toggleButton active" id="output">output</div>
+        </div>
+    </div>
+    <div id="bodyContainer">
+        
+        <textarea id="htmlPanel" class="panel"><p id="paragraph">hello world</p></textarea>
+        <textarea id="cssPanel" class="panel hidden">p{color:green;}</textarea>
+        <textarea id="javascriptPanel" class="panel hidden">document.getElementById("paragraph").innerHTML="hello javascript";</textarea>
+        <iframe id="outputPanel" class="panel"></iframe>
+    </div>
+    
+    
+    
+    <script type="text/javascript">
+        
+        function updateOutput()
+        {
+            $("iframe").contents().find("html").html("<html><head><style>"+$("#cssPanel").val()+"</style></head><body>"+$("#htmlPanel").val()+"</body></html>");
+            document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+            
+        }
+        $(".toggleButton").hover(function(){
+            
+            $(this).addClass("highlightedButton");
+            
+            $(this).css("cursor","pointer");
+            
+        },function(){
+            
+            $(this).removeClass("highlightedButton");
+            
+        });
+        $(".toggleButton").click(function(){
+            
+            $(this).toggleClass("active");
+            
+            $(this).removeClass("highlightedButton");
+            
+            var panelId=$(this).attr("id")+"Panel";
+            
+            $("#"+panelId).toggleClass("hidden");
+            
+            var numberOfActivePanel = 4-$(".hidden").length;
+            
+            $(".panel").width(($(window).width()/numberOfActivePanel)-16);
+            
+        });
+        
+        $(".panel").height($(window).height()-$("#header").height()-16);
+        
+        $(".panel").width(($(window).width()/2)-16);
+        
+        updateOutput();
+        
+        $("textarea").on('change keyup paste',function()
+                        {
+            updateOutput();
+        })
+    </script>
+</body>
+</html>
